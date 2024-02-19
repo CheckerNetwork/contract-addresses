@@ -1,0 +1,17 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: juliangruber/read-file-action@v1
+        id: addresses
+        with:
+          path: ./addresses.txt
+          trim: true
+      - uses: filecoin-station/w3name-update-action@v0
+        with:
+          value: ${{ steps.addresses.outputs.content }}
+          private-key: ${{ secrets.W3NAME_PRIVATE_KEY }}
+          revision: ${{ secrets.W3NAME_REVISION }}
