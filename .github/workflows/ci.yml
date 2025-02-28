@@ -20,3 +20,22 @@ jobs:
           value: ${{ steps.addresses.outputs.content }}
           private-key: ${{ secrets.W3NAME_PRIVATE_KEY }}
           revision: ${{ secrets.W3NAME_REVISION }}
+      - if: failure()
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "alerts",
+              "text": "Republishing contract addresses failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":warning: *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Republishing contract addresses failed>*"
+                  }
+                }
+              ]
+            }
