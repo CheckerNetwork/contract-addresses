@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'main'
+  schedule:
+    - cron: "0 0 1 * *" # Runs at 00:00, on day 1 of the month
 jobs:
   build:
     runs-on: ubuntu-latest
